@@ -1,0 +1,148 @@
+
+
+ const express = require('express');// get the exprex module  object
+  const app= express();// make the object of express
+
+  const mongoose= require("mongoose");
+// import the note model
+const Note = require("./models/Note");
+
+const bodyParser= require("body-parser");
+app.use(bodyParser.urlencoded({extended: false}));
+// true -> nested object (correct)
+// false -> nesetd object (not correct)
+app.use(bodyParser.json());
+
+
+
+// connect the data base
+
+mongoose.connect("mongodb+srv://chandrakantamuduli86:Mnbvcxz123414@tutorial.7yxppds.mongodb.net/notesDB").then(
+    function()
+    {
+ // if sucecssfully conect the data base then access the data base...... 
+
+
+
+
+       // make the home page route("/")
+      app.get("/",function(req,res){
+      //  res.send("this is the home page");
+       const response ={"message":"API works"};
+       res.json(response);
+        });
+        console.log("home route create ");
+
+
+
+
+
+
+app.get("/list/",async function(req,res){
+
+    var note=  await Note.find();
+    res.json(note);
+
+  });
+
+  
+
+
+
+  app.get("/list/:userid", async function(req,res){
+
+    var note = await Note.find({userid: req.params.userid});
+    res.json(note);
+  
+  });
+
+
+
+
+  // make it post request
+  app.post("/list/", async function(req,res){
+
+    var note = await Note.find({userid: req.body.userid});
+    res.json(note);
+  
+  });
+
+
+
+
+    //save the data in mongoose
+  
+  //   app.get("/notes/add", async function(req, res) {
+  //     try {
+  //         const newNote = new Note({
+  //             id: "0003",
+  //             userid: "chandrakanta",
+  //             title: "this is my note 3",
+  //             content: "this is the content of my third note"
+  //         });
+
+  //         await newNote.save();
+  //         console.log("Data added successfully");
+  //         res.json({ message: "Data successfully added" });
+
+  //     } catch (error) {
+  //         console.error("Error adding data:", error);
+  //         res.status(500).json({ error: "Internal server error" });
+  //     }
+  // });
+
+
+
+
+
+  // send the data in post request using parameter 
+  app.post("/add",async  function(req,res){
+
+    // res.json(req.body);
+
+    await Note.deleteOne({id: req.body.id});
+    const newNote= new Note({
+
+      id: req.body.id,
+      userid: req.body.userid,
+      title:req.body.title,
+      content: req.body.connect,
+
+    });
+
+     await newNote.save();
+
+     const response ={message: " new note created!" + `id:${req.body.id}`};
+     res.json(response);
+     console.log("note create sucessfully");
+
+  });
+
+
+
+
+  // delete request 
+  app.post("/delete", async function(req,res){
+
+    await Note.deleteOne({id: req.body.id});
+
+    const response ={ message: "note deleted sucessfully! "+ `id: ${req.body.id}`};
+
+    res.json(response);
+
+  });
+
+
+  
+    }
+);// connect the data base
+
+
+  
+app.listen(5000,function()
+{
+    console.log("server start at port : 5000");
+});// port 
+
+
+
