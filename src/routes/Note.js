@@ -57,6 +57,7 @@ app.get("/list/",async function(req,res){
   // });
 
 
+
   // send the data in post request using parameter 
   app.post("/add",async  function(req,res){
 
@@ -83,12 +84,20 @@ app.get("/list/",async function(req,res){
 
   // delete request 
   app.post("/delete", async function(req,res){
-
+    try{
     await Note.deleteOne({id: req.body.id});
 
     const response ={ message: "note deleted sucessfully! "+ `id: ${req.body.id}`};
 
     res.json(response);
+    console.log(response);
+  }
+  catch(e)
+  {
+    console.error(e)
+    // res.status(500).json({ error: "Internal server error" });
+
+  }
 
   });
 
