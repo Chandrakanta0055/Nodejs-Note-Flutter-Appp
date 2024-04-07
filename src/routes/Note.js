@@ -10,6 +10,10 @@ app.get("/list/",async function(req,res){
     res.json(note);
 
   });
+  app.post("/list/", async function(req,res){
+ var note=  await Note.find();
+ res.json(note);
+  });
 
   
   app.get("/list/:userid", async function(req,res){

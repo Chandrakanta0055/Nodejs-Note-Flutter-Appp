@@ -23,7 +23,7 @@ mongoose.connect(mongodbPath).then(
        // make the home page route("/")
       app.get("/",function(req,res){
       //  res.send("this is the home page");
-       const response ={"message":"API works"};
+       const response ={statusCode: res.statusCode,"message":"API works"};
        res.json(response);
         });
         console.log("home route create ");
